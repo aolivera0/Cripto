@@ -1,0 +1,592 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+  <main class="page">
+    <div class="page-header">
+      <h1 class="page-title">5. Algoritmo de Hill</h1>
+    </div>
+
+    <section class="card statement-card">
+      <h2 class="card-title">Enunciado</h2>
+      <p>
+        Implementar el algoritmo de cifrado de bloques de Hill en Python (o en
+        el lenguaje de su elección) utilizando el módulo 26. Asegúrese de
+        validar que la matriz tiene inversa modular, es decir, que el
+        determinante es diferente a 0 y que el determinante sea coprimo con 26,
+        es deci,r que gcd(detA,26)=1.
+      </p>
+      <p>El algoritmo debe recibir como entrada para cifrar:</p>
+      <ul class="styled-list">
+        <li>El mensaje en texto claro</li>
+        <li>La clave (matriz de 2x2)</li>
+      </ul>
+      <p>Para decifrar:</p>
+      <ul class="styled-list">
+        <li>Mensaje cifrado</li>
+        <li>La clave (matriz de 2x2)</li>
+      </ul>
+      <p>Qué debo subir?</p>
+      <ul class="styled-list">
+        <li>
+          Capture un screenshot de la ejecución de ciframiento y deciframiento
+        </li>
+        <li>
+          Construya un ZIP con el código .py y el la imagen del screenshot
+        </li>
+      </ul>
+    </section>
+
+    <div class="solutions-grid">
+      <section class="card solution-card">
+        <h2 class="card-title">
+          <span class="card-icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 9.9-1"></path>
+            </svg>
+          </span>
+          Cifrar
+        </h2>
+
+        <div class="input-group">
+          <label for="texto-a-cifrar">Texto a cifrar</label>
+          <input
+            type="text"
+            id="texto-a-cifrar"
+            class="input"
+            placeholder="Texto a cifrar..."
+          />
+        </div>
+
+        <div class="input-group">
+          <label for="matriz-clave-ciframiento-0">Matriz clave</label>
+          <div class="input-matrix">
+            <input
+              type="number"
+              id="matriz-clave-ciframiento-0"
+              class="input"
+            />
+            <input
+              type="number"
+              id="matriz-clave-ciframiento-1"
+              class="input"
+            />
+            <input
+              type="number"
+              id="matriz-clave-ciframiento-2"
+              class="input"
+            />
+            <input
+              type="number"
+              id="matriz-clave-ciframiento-3"
+              class="input"
+            />
+          </div>
+        </div>
+
+        <button id="cifrar-btn" class="btn btn-primary">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 9.9-1"></path>
+          </svg>
+          Cifrar
+        </button>
+
+        <div class="result-group">
+          <div class="result-item">
+            <span class="result-label">Mensaje cifrado:</span>
+            <p id="texto-cifrado" class="result-value">-</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card solution-card">
+        <h2 class="card-title">
+          <span class="card-icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 9.9-1"></path>
+            </svg>
+          </span>
+          Descifrar
+        </h2>
+
+        <div class="input-group">
+          <label for="texto-a-descifrar">Texto a descifrar</label>
+          <input
+            type="text"
+            id="texto-a-descifrar"
+            class="input"
+            placeholder="Texto a cifrar..."
+          />
+        </div>
+        <div class="input-group">
+          <label for="matriz-clave-desciframiento-0"
+            >Matriz clave (inversa)</label
+          >
+          <div class="input-matrix">
+            <input
+              type="number"
+              id="matriz-clave-desciframiento-0"
+              class="input"
+            />
+            <input
+              type="number"
+              id="matriz-clave-desciframiento-1"
+              class="input"
+            />
+            <input
+              type="number"
+              id="matriz-clave-desciframiento-2"
+              class="input"
+            />
+            <input
+              type="number"
+              id="matriz-clave-desciframiento-3"
+              class="input"
+            />
+          </div>
+        </div>
+        <button id="descifrar-btn" class="btn btn-primary">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 9.9-1"></path>
+          </svg>
+          Descifrar
+        </button>
+
+        <div class="result-group">
+          <div class="result-item">
+            <span class="result-label">Mensaje descifrado:</span>
+            <p id="texto-descifrado" class="result-value">-</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    import EEA from "../utils/EED";
+
+    const textoACifrar =
+      document.querySelector<HTMLInputElement>("#texto-a-cifrar")!;
+    const btnCifrar = document.querySelector<HTMLButtonElement>("#cifrar-btn")!;
+    const textoCifrado =
+      document.querySelector<HTMLParagraphElement>("#texto-cifrado")!;
+    const matrizCiframiento0 = document.querySelector<HTMLInputElement>(
+      "#matriz-clave-ciframiento-0",
+    )!;
+    const matrizCiframiento1 = document.querySelector<HTMLInputElement>(
+      "#matriz-clave-ciframiento-1",
+    )!;
+    const matrizCiframiento2 = document.querySelector<HTMLInputElement>(
+      "#matriz-clave-ciframiento-2",
+    )!;
+    const matrizCiframiento3 = document.querySelector<HTMLInputElement>(
+      "#matriz-clave-ciframiento-3",
+    )!;
+
+    const textoADescifrar =
+      document.querySelector<HTMLInputElement>("#texto-a-descifrar")!;
+    const btnDescifrar =
+      document.querySelector<HTMLButtonElement>("#descifrar-btn")!;
+    const matrizDesciframiento0 = document.querySelector<HTMLInputElement>(
+      "#matriz-clave-desciframiento-0",
+    )!;
+    const matrizDesciframiento1 = document.querySelector<HTMLInputElement>(
+      "#matriz-clave-desciframiento-1",
+    )!;
+    const matrizDesciframiento2 = document.querySelector<HTMLInputElement>(
+      "#matriz-clave-desciframiento-2",
+    )!;
+    const matrizDesciframiento3 = document.querySelector<HTMLInputElement>(
+      "#matriz-clave-desciframiento-3",
+    )!;
+    const textoDescifrado =
+      document.querySelector<HTMLParagraphElement>("#texto-descifrado")!;
+
+    const ALFABETO = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    btnCifrar.addEventListener("click", () => {
+      const mensaje = limpiarEntrada(textoACifrar);
+      const A = obtenerMatrizA(true);
+
+      let mensajeEncriptado = operar(mensaje, A);
+      imprimirResultado(mensajeEncriptado, textoCifrado);
+      asignarInversa(A);
+    });
+
+    btnDescifrar.addEventListener("click", () => {
+      const mensaje = limpiarEntrada(textoADescifrar);
+      const Ainv = obtenerMatrizA(false);
+
+      let mensajeDesencriptado = operar(mensaje, Ainv);
+      imprimirResultado(mensajeDesencriptado, textoDescifrado);
+    });
+
+    function obtenerMatrizA(paraCifrar: boolean): number[][] {
+      let A: number[][] = [];
+      if (paraCifrar) {
+        A = [
+          [
+            parseInt(matrizCiframiento0.value),
+            parseInt(matrizCiframiento1.value),
+          ],
+          [
+            parseInt(matrizCiframiento2.value),
+            parseInt(matrizCiframiento3.value),
+          ],
+        ];
+      } else {
+        A = [
+          [
+            parseInt(matrizDesciframiento0.value),
+            parseInt(matrizDesciframiento1.value),
+          ],
+          [
+            parseInt(matrizDesciframiento2.value),
+            parseInt(matrizDesciframiento3.value),
+          ],
+        ];
+      }
+
+      return A;
+    }
+
+    function calcularInversaA(A: number[][]): number[][] {
+      const detA = mod(A[0][0] * A[1][1] - A[0][1] * A[1][0]);
+      const [d, x] = EEA(detA, 26);
+
+      if (d !== 1) {
+        alert("La matriz no es invertible módulo 26. Use otra llave");
+        throw new Error("Matriz no invertible mod 26");
+      }
+
+      let AdjA = [
+        [A[1][1], -A[0][1]],
+        [-A[1][0], A[0][0]],
+      ];
+
+      let invA = AdjA;
+      for (let i = 0; i < invA.length; i++) {
+        for (let j = 0; j < invA.length; j++) {
+          invA[i][j] = mod(invA[i][j] * x);
+        }
+      }
+
+      return invA;
+    }
+
+    function asignarInversa(A: number[][]) {
+      const invA = calcularInversaA(A);
+
+      matrizDesciframiento0.value = invA[0][0].toString();
+      matrizDesciframiento1.value = invA[0][1].toString();
+      matrizDesciframiento2.value = invA[1][0].toString();
+      matrizDesciframiento3.value = invA[1][1].toString();
+    }
+
+    function operar(input: string, llave: number[][]): string {
+      let texto = input;
+      let output = "";
+      if (texto.length % 2 !== 0) {
+        texto += "X";
+      }
+
+      for (let i = 0; i < texto.length; i += 2) {
+        let a = ALFABETO.indexOf(texto[i]);
+        let b = ALFABETO.indexOf(texto[i + 1]);
+
+        let aNueva = mod(a * llave[0][0] + b * llave[1][0]);
+        let bNueva = mod(a * llave[0][1] + b * llave[1][1]);
+
+        output += ALFABETO[aNueva] + ALFABETO[bNueva];
+      }
+
+      return output;
+    }
+
+    function mod(n: number){
+      ((n % 26) + 26) % 26;
+    }
+
+    function limpiarEntrada(texto: HTMLInputElement) {
+      return texto.value.toUpperCase().split(" ").join("");
+    }
+
+    function imprimirResultado(
+      mensaje: string,
+      elemento: HTMLParagraphElement,
+    ) {
+      elemento.textContent = mensaje ?? "";
+    }
+
+  </script>
+
+  <style>
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+
+    .page-header {
+      margin-bottom: 2rem;
+    }
+
+    .page-title {
+      font-size: 2.25rem;
+      font-weight: 800;
+      margin: 0 0 0.35rem;
+      letter-spacing: -0.02em;
+    }
+
+    .page-subtitle {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      padding: 1.75rem;
+      margin-bottom: 1.5rem;
+      transition: border-color 0.2s ease;
+    }
+
+    .card:hover {
+      border-color: color-mix(in srgb, var(--accent) 30%, var(--border));
+    }
+
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin: 0 0 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 0.5rem;
+      background: var(--accent-glow);
+      color: var(--accent);
+    }
+
+    .card p {
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin: 0.5rem 0;
+    }
+
+    .textarea {
+      resize: none;
+    }
+
+    .styled-list {
+      list-style: none;
+      padding-left: 1.25rem;
+      margin: 0.5rem 0;
+    }
+
+    .styled-list li {
+      position: relative;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      padding-left: 0.75rem;
+    }
+
+    .styled-list li::before {
+      content: "";
+      position: absolute;
+      left: -0.25rem;
+      top: 0.6rem;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .solutions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .input-group {
+      margin-bottom: 1rem;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 0.4rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .input {
+      width: 100%;
+      padding: 0.7rem 0.9rem;
+      border-radius: 0.5rem;
+      border: 1px solid var(--border);
+      background: var(--input-bg);
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      font-family: inherit;
+      transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+      box-sizing: border-box;
+    }
+
+    .input-matrix {
+      max-width: 50%;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .input::placeholder {
+      color: var(--text-secondary);
+      opacity: 0.6;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.65rem 1.5rem;
+      border: none;
+      border-radius: 0.5rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      box-shadow: 0 2px 8px var(--accent-glow);
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px var(--accent-glow);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .result-group {
+      margin-top: 1.25rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .result-item {
+      margin-bottom: 0.75rem;
+    }
+
+    .result-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .result-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .result-value {
+      font-size: 1rem;
+      font-family: "Courier New", Courier, monospace;
+      word-break: break-all;
+      margin: 0.25rem 0 0;
+      padding: 0.5rem 0.75rem;
+      background: var(--input-bg);
+      border-radius: 0.375rem;
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      min-height: 1.5rem;
+    }
+
+    .key-value {
+      color: var(--accent);
+    }
+
+    .warning-message {
+      font-size: 11px;
+      opacity: 60%;
+    }
+
+    @media (max-width: 720px) {
+      .solutions-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</Layout>
