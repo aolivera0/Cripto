@@ -1,0 +1,920 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+  <main class="page">
+    <div class="page-header">
+      <h1 class="page-title">7. Algoritmo de Turning Grille</h1>
+    </div>
+
+    <section class="card statement-card">
+      <h2 class="card-title">Enunciado</h2>
+      <p>
+        Implementar el algoritmo de Turning Grille utilizando Python, en donde
+        se reciben los siguientes parámetros:
+      </p>
+      <p>El algoritmo debe recibir como entrada para cifrar:</p>
+      <ul class="styled-list">
+        <li>
+          Tamaño de la retícula (cuadrada, por ejemplo 2 indica que es de 2x2)
+        </li>
+        <li>
+          Dirección de la rotación (sentido de las manecillas del reloj o
+          sentido contrario, por ejemplo 1 ó 0 respectivamente)
+        </li>
+        <li>
+          Modo (cifra miento o desciframiento, por ejemplo 1 ó 0
+          respectivamente)
+        </li>
+        <li>
+          Cantidad y distribución de los hoyos (se recomienda ingresar
+          únicamente las celdas de la matriz en la que hay hoyos)
+        </li>
+        <li>Mensaje a (de)cifrar</li>
+      </ul>
+      <p>Subir un zip con lo siguiente:</p>
+      <ul class="styled-list">
+        <li>Script de python</li>
+        <li>Pantallazo o video en donde se muestre funcionando el script</li>
+      </ul>
+    </section>
+
+    <section class="card solution-card">
+      <h2 class="card-title">Retícula para encriptar/desencriptar</h2>
+
+      <div class="config-grid">
+        <div class="input-group">
+          <label for="matrix-size">Tamaño de la matriz (par)</label>
+          <select id="matrix-size" class="input">
+            <option value="2" selected>2</option>
+            <option value="4">4</option>
+            <option value="6">6</option>
+            <option value="8">8</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <label for="direccion">Dirección de giro</label>
+          <select id="direccion" class="input">
+            <option value="0" selected>Antihorario (0)</option>
+            <option value="1">Horario (1)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="matrix-toolbar">
+        <button id="limpiar-btn" type="button" class="btn btn-secondary">
+          Limpiar
+        </button>
+        <button id="aleatoria-btn" type="button" class="btn btn-secondary">
+          Retícula aleatoria
+        </button>
+      </div>
+
+      <p id="info-reticula" class="matrix-info"></p>
+
+      <div class="matrix-layout">
+        <div class="matrix-panel">
+          <span class="panel-label">Retícula (clic para abrir un hueco)</span>
+          <div id="matriz-contenedor" class="matrix-container"></div>
+        </div>
+
+        <div class="matrix-panel cobertura-wrap">
+          <span class="panel-label">Orden de escritura por giro</span>
+          <div id="cobertura-contenedor" class="cobertura-grid"></div>
+          <div class="legend">
+            <span><span class="cov cov-1">1</span> Inicial</span>
+            <span><span class="cov cov-2">2</span> 1er giro</span>
+            <span><span class="cov cov-3">3</span> 2º giro</span>
+            <span><span class="cov cov-4">4</span> 3er giro</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="solutions-grid">
+      <section class="card solution-card">
+        <h2 class="card-title">
+          <span class="card-icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 9.9-1"></path>
+            </svg>
+          </span>
+          Cifrar
+        </h2>
+
+        <div class="input-group">
+          <label for="texto-a-cifrar">Texto a cifrar</label>
+          <input
+            type="text"
+            id="texto-a-cifrar"
+            class="input"
+            placeholder="Texto a cifrar..."
+          />
+        </div>
+
+        <button id="cifrar-btn" class="btn btn-primary">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 9.9-1"></path>
+          </svg>
+          Cifrar
+        </button>
+
+        <div class="result-group">
+          <div class="result-item">
+            <span class="result-label">Mensaje cifrado:</span>
+            <p id="texto-cifrado" class="result-value">-</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card solution-card">
+        <h2 class="card-title">
+          <span class="card-icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 9.9-1"></path>
+            </svg>
+          </span>
+          Descifrar
+        </h2>
+
+        <div class="input-group">
+          <label for="texto-a-descifrar">Texto a descifrar</label>
+          <input
+            type="text"
+            id="texto-a-descifrar"
+            class="input"
+            placeholder="Texto a descifrar..."
+          />
+        </div>
+
+        <button id="descifrar-btn" class="btn btn-primary">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 9.9-1"></path>
+          </svg>
+          Descifrar
+        </button>
+
+        <div class="result-group">
+          <div class="result-item">
+            <span class="result-label">Mensaje descifrado:</span>
+            <p id="texto-descifrado" class="result-value">-</p>
+          </div>
+          <p class="warning-message">
+            Si el mensaje original no completaba el bloque, al final aparecerán
+            letras X de relleno.
+          </p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const matrizSize =
+      document.querySelector<HTMLSelectElement>("#matrix-size")!;
+    const direccionSelect =
+      document.querySelector<HTMLSelectElement>("#direccion")!;
+    const matrizContenedor =
+      document.querySelector<HTMLDivElement>("#matriz-contenedor")!;
+    const infoReticula =
+      document.querySelector<HTMLParagraphElement>("#info-reticula")!;
+    const coberturaContenedor =
+      document.querySelector<HTMLDivElement>("#cobertura-contenedor")!;
+    const btnLimpiar = document.querySelector<HTMLButtonElement>("#limpiar-btn")!;
+    const btnAleatoria =
+      document.querySelector<HTMLButtonElement>("#aleatoria-btn")!;
+
+    const textoACifrar =
+      document.querySelector<HTMLInputElement>("#texto-a-cifrar")!;
+    const btnCifrar = document.querySelector<HTMLButtonElement>("#cifrar-btn")!;
+    const textoCifrado =
+      document.querySelector<HTMLParagraphElement>("#texto-cifrado")!;
+
+    const textoADescifrar =
+      document.querySelector<HTMLInputElement>("#texto-a-descifrar")!;
+    const btnDescifrar =
+      document.querySelector<HTMLButtonElement>("#descifrar-btn")!;
+    const textoDescifrado =
+      document.querySelector<HTMLParagraphElement>("#texto-descifrado")!;
+
+    // Retícula actual: 1 = hueco, 0 = cartón. Nunca se rota en sitio.
+    let matrizCeldas: number[][] = [];
+
+    // ---------- Rotaciones (devuelven una matriz nueva) ----------
+    const girarMatrizDerecha = (m: number[][]) =>
+      m.map((_, i) => m.map((fila) => fila[i]).reverse());
+
+    const girarMatrizIzquierda = (m: number[][]) =>
+      m[0].map((_, i) => m.map((fila) => fila[fila.length - 1 - i]));
+
+    // ---------- Lógica del algoritmo ----------
+
+    // Lista ordenada de posiciones [fila, col] en las que se escribe,
+    // recorriendo los 4 giros de la retícula. Trabaja sobre una copia.
+    function posiciones(
+      rejilla: number[][],
+      horario: boolean,
+    ): [number, number][] {
+      const n = rejilla.length;
+      const pos: [number, number][] = [];
+      let actual = rejilla.map((fila) => [...fila]);
+
+      for (let g = 0; g < 4; g++) {
+        for (let i = 0; i < n; i++) {
+          for (let j = 0; j < n; j++) {
+            if (actual[i][j] === 1) pos.push([i, j]);
+          }
+        }
+        actual = horario
+          ? girarMatrizDerecha(actual)
+          : girarMatrizIzquierda(actual);
+      }
+      return pos;
+    }
+
+    // Devuelve un mensaje de error, o null si la retícula es válida.
+    function validar(rejilla: number[][]): string | null {
+      const n = rejilla.length;
+      if (n % 2 !== 0) return "El tamaño de la retícula debe ser par.";
+
+      const pos = posiciones(rejilla, false);
+      const distintas = new Set(pos.map(([i, j]) => `${i},${j}`));
+
+      if (pos.length !== n * n || distintas.size !== n * n) {
+        return `Retícula inválida: debe tener exactamente ${(n * n) / 4} huecos y, al girarla 4 veces, cubrir cada celda una sola vez.`;
+      }
+      return null;
+    }
+
+    function cifrar(texto: string, rejilla: number[][], horario: boolean) {
+      const n = rejilla.length;
+      const bloque = n * n;
+      const pos = posiciones(rejilla, horario);
+
+      // Rellena con X hasta completar un número entero de bloques
+      texto = texto.padEnd(Math.ceil(texto.length / bloque) * bloque, "X");
+
+      let salida = "";
+      for (let b = 0; b < texto.length; b += bloque) {
+        const m: string[][] = Array.from({ length: n }, () =>
+          Array(n).fill(""),
+        );
+        pos.forEach(([i, j], k) => {
+          m[i][j] = texto[b + k];
+        });
+        salida += m.map((fila) => fila.join("")).join("");
+      }
+      return salida;
+    }
+
+    function descifrar(cifrado: string, rejilla: number[][], horario: boolean) {
+      const n = rejilla.length;
+      const bloque = n * n;
+      const pos = posiciones(rejilla, horario); // misma dirección que al cifrar
+
+      let salida = "";
+      for (let b = 0; b < cifrado.length; b += bloque) {
+        const trozo = cifrado.slice(b, b + bloque);
+        salida += pos.map(([i, j]) => trozo[i * n + j]).join("");
+      }
+      return salida;
+    }
+
+    // ---------- Utilidades de UI ----------
+    function limpiarEntrada(input: HTMLInputElement) {
+      return input.value.toUpperCase().replace(/\s+/g, "");
+    }
+
+    // Separa el texto en grupos de n letras para mostrarlo (una fila por grupo)
+    function agrupar(texto: string, n: number) {
+      return texto.match(new RegExp(`.{1,${n}}`, "g"))?.join(" ") ?? "";
+    }
+
+    // Las 4 celdas equivalentes por rotación de (i, j)
+    function orbita(i: number, j: number, n: number): [number, number][] {
+      const res: [number, number][] = [];
+      let a = i;
+      let b = j;
+      for (let k = 0; k < 4; k++) {
+        res.push([a, b]);
+        [a, b] = [b, n - 1 - a];
+      }
+      return res;
+    }
+
+    // Una celda queda bloqueada si otra de su órbita ya es hueco
+    function estaBloqueada(i: number, j: number) {
+      if (matrizCeldas[i][j] === 1) return false;
+      const n = matrizCeldas.length;
+      return orbita(i, j, n).some(([a, b]) => matrizCeldas[a][b] === 1);
+    }
+
+    // Para cada celda, en qué giro (1-4) queda expuesta (0 = nunca)
+    function cobertura(): number[][] {
+      const n = matrizCeldas.length;
+      const mapa: number[][] = Array.from({ length: n }, () =>
+        Array(n).fill(0),
+      );
+      let actual = matrizCeldas.map((fila) => [...fila]);
+
+      for (let g = 0; g < 4; g++) {
+        for (let i = 0; i < n; i++) {
+          for (let j = 0; j < n; j++) {
+            if (actual[i][j] === 1 && mapa[i][j] === 0) mapa[i][j] = g + 1;
+          }
+        }
+        actual = esHorario()
+          ? girarMatrizDerecha(actual)
+          : girarMatrizIzquierda(actual);
+      }
+      return mapa;
+    }
+
+    function resaltarOrbita(i: number, j: number, activo: boolean) {
+      const n = matrizCeldas.length;
+      orbita(i, j, n).forEach(([a, b]) => {
+        matrizContenedor.children[a * n + b]?.classList.toggle("is-eco", activo);
+      });
+    }
+
+    function renderCobertura() {
+      const n = matrizCeldas.length;
+      const mapa = cobertura();
+      coberturaContenedor.innerHTML = "";
+      coberturaContenedor.style.gridTemplateColumns = `repeat(${n}, var(--cell))`;
+
+      for (let i = 0; i < n; i++) {
+        for (let j = 0; j < n; j++) {
+          const celda = document.createElement("span");
+          celda.className = `cov cov-${mapa[i][j]}`;
+          celda.textContent = mapa[i][j] > 0 ? String(mapa[i][j]) : "";
+          coberturaContenedor.appendChild(celda);
+        }
+      }
+    }
+
+    function actualizarInfo() {
+      const n = matrizCeldas.length;
+      const huecos = matrizCeldas.flat().filter((c) => c === 1).length;
+      const esperados = (n * n) / 4;
+      infoReticula.textContent =
+        huecos === esperados
+          ? `Retícula completa ✓ (${huecos} huecos)`
+          : `Huecos marcados: ${huecos} de ${esperados}. Las celdas atenuadas ya quedan cubiertas por otro hueco.`;
+    }
+
+    function renderMatriz() {
+      const n = matrizCeldas.length;
+      matrizContenedor.innerHTML = "";
+      matrizContenedor.style.gridTemplateColumns = `repeat(${n}, var(--cell))`;
+
+      for (let i = 0; i < n; i++) {
+        for (let j = 0; j < n; j++) {
+          const hueco = matrizCeldas[i][j] === 1;
+          const bloqueada = estaBloqueada(i, j);
+
+          const celda = document.createElement("button");
+          celda.type = "button";
+          celda.className = "matrix-cell";
+          celda.setAttribute("aria-pressed", String(hueco));
+          celda.setAttribute("aria-label", `Fila ${i + 1}, columna ${j + 1}`);
+          if (hueco) celda.classList.add("is-hole");
+          if (bloqueada) {
+            celda.classList.add("is-blocked");
+            celda.disabled = true;
+            celda.title = "Ya cubierta por otro hueco al girar";
+          }
+
+          celda.onclick = () => {
+            matrizCeldas[i][j] = hueco ? 0 : 1;
+            renderMatriz();
+          };
+          celda.onmouseenter = () => resaltarOrbita(i, j, true);
+          celda.onmouseleave = () => resaltarOrbita(i, j, false);
+
+          matrizContenedor.appendChild(celda);
+        }
+      }
+      renderCobertura();
+      actualizarInfo();
+    }
+
+    function dibujarMatriz() {
+      const n = parseInt(matrizSize.value);
+      matrizCeldas = Array.from({ length: n }, () => Array(n).fill(0));
+      renderMatriz();
+    }
+
+    // Genera una retícula válida: un hueco al azar por cada órbita
+    function reticulaAleatoria() {
+      const n = parseInt(matrizSize.value);
+      matrizCeldas = Array.from({ length: n }, () => Array(n).fill(0));
+      for (let i = 0; i < n / 2; i++) {
+        for (let j = 0; j < n / 2; j++) {
+          const k = Math.floor(Math.random() * 4);
+          const [a, b] = orbita(i, j, n)[k];
+          matrizCeldas[a][b] = 1;
+        }
+      }
+      renderMatriz();
+    }
+
+    const esHorario = () => direccionSelect.value === "1";
+
+    // ---------- Eventos ----------
+    matrizSize.addEventListener("change", dibujarMatriz);
+    direccionSelect.addEventListener("change", renderCobertura);
+    btnLimpiar.addEventListener("click", dibujarMatriz);
+    btnAleatoria.addEventListener("click", reticulaAleatoria);
+
+    btnCifrar.addEventListener("click", () => {
+      const error = validar(matrizCeldas);
+      if (error) {
+        alert(error);
+        return;
+      }
+
+      const texto = limpiarEntrada(textoACifrar);
+      if (texto.length === 0) {
+        alert("Ingresa un texto para cifrar.");
+        return;
+      }
+
+      const n = matrizCeldas.length;
+      const resultado = cifrar(texto, matrizCeldas, esHorario());
+      textoCifrado.textContent = agrupar(resultado, n);
+    });
+
+    btnDescifrar.addEventListener("click", () => {
+      const error = validar(matrizCeldas);
+      if (error) {
+        alert(error);
+        return;
+      }
+
+      const texto = limpiarEntrada(textoADescifrar);
+      const n = matrizCeldas.length;
+
+      if (texto.length === 0 || texto.length % (n * n) !== 0) {
+        alert(
+          `El texto cifrado debe tener una cantidad de letras múltiplo de ${n * n}.`,
+        );
+        return;
+      }
+
+      textoDescifrado.textContent = descifrar(texto, matrizCeldas, esHorario());
+    });
+
+    // Dibuja la retícula inicial al cargar la página
+    dibujarMatriz();
+  </script>
+
+  <style>
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+
+    .page-header {
+      margin-bottom: 2rem;
+    }
+
+    .page-title {
+      font-size: 2.25rem;
+      font-weight: 800;
+      margin: 0 0 0.35rem;
+      letter-spacing: -0.02em;
+    }
+
+    .page-subtitle {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      padding: 1.75rem;
+      margin-bottom: 1.5rem;
+      transition: border-color 0.2s ease;
+    }
+
+    .card:hover {
+      border-color: color-mix(in srgb, var(--accent) 30%, var(--border));
+    }
+
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin: 0 0 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 0.5rem;
+      background: var(--accent-glow);
+      color: var(--accent);
+    }
+
+    .card p {
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin: 0.5rem 0;
+    }
+
+    .textarea {
+      resize: none;
+    }
+
+    .styled-list {
+      list-style: none;
+      padding-left: 1.25rem;
+      margin: 0.5rem 0;
+    }
+
+    .styled-list li {
+      position: relative;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      padding-left: 0.75rem;
+    }
+
+    .styled-list li::before {
+      content: "";
+      position: absolute;
+      left: -0.25rem;
+      top: 0.6rem;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .solutions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .config-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    .input-group {
+      margin-bottom: 1rem;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 0.4rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .input {
+      width: 100%;
+      padding: 0.7rem 0.9rem;
+      border-radius: 0.5rem;
+      border: 1px solid var(--border);
+      background: var(--input-bg);
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      font-family: inherit;
+      transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+      box-sizing: border-box;
+    }
+
+    .input-matrix {
+      max-width: 50%;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .input::placeholder {
+      color: var(--text-secondary);
+      opacity: 0.6;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.65rem 1.5rem;
+      border: none;
+      border-radius: 0.5rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      box-shadow: 0 2px 8px var(--accent-glow);
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px var(--accent-glow);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .result-group {
+      margin-top: 1.25rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .result-item {
+      margin-bottom: 0.75rem;
+    }
+
+    .result-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .result-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .result-value {
+      font-size: 1rem;
+      font-family: "Courier New", Courier, monospace;
+      word-break: break-all;
+      margin: 0.25rem 0 0;
+      padding: 0.5rem 0.75rem;
+      background: var(--input-bg);
+      border-radius: 0.375rem;
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      min-height: 1.5rem;
+    }
+
+    .key-value {
+      color: var(--accent);
+    }
+
+    .warning-message {
+      font-size: 11px;
+      opacity: 60%;
+    }
+
+    @media (max-width: 720px) {
+      .solutions-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .matrix-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .card .matrix-info {
+      font-size: 0.9rem;
+      margin: 0.5rem 0 0;
+    }
+
+    .matrix-layout {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 2rem;
+      margin-top: 1rem;
+    }
+
+    .matrix-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .panel-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .matrix-container,
+    .cobertura-grid {
+      display: grid;
+      gap: 4px;
+      padding: 12px;
+      width: fit-content;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+    }
+
+    .matrix-container {
+      --cell: clamp(34px, 9vw, 52px);
+    }
+
+    .cobertura-wrap {
+      --cell: 28px;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .legend > span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+  </style>
+
+  <!-- Estilos globales: las celdas se crean con JS y no reciben el scope de Astro -->
+  <style is:global>
+    .matrix-cell {
+      position: relative;
+      width: var(--cell);
+      height: var(--cell);
+      padding: 0;
+      border-radius: 0.4rem;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      cursor: pointer;
+      transition:
+        transform 0.15s ease,
+        background 0.15s ease,
+        border-color 0.15s ease,
+        opacity 0.15s ease;
+    }
+
+    .matrix-cell:hover:not(:disabled) {
+      border-color: var(--accent);
+      transform: scale(1.05);
+    }
+
+    .matrix-cell:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .matrix-cell.is-hole {
+      background: var(--accent-glow);
+      border-color: var(--accent);
+    }
+
+    .matrix-cell.is-hole::after {
+      content: "";
+      position: absolute;
+      inset: 22%;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.35);
+    }
+
+    .matrix-cell.is-blocked {
+      opacity: 0.3;
+      cursor: not-allowed;
+      background-image: repeating-linear-gradient(
+        45deg,
+        transparent 0 6px,
+        var(--border) 6px 7px
+      );
+    }
+
+    .matrix-cell.is-eco {
+      outline: 2px dashed var(--accent);
+      outline-offset: 1px;
+    }
+
+    .cov {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: var(--cell);
+      height: var(--cell);
+      border-radius: 0.3rem;
+      border: 1px solid var(--border);
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.8rem;
+      font-weight: 700;
+      box-sizing: border-box;
+    }
+
+    .cov-1 {
+      background: hsl(210 80% 55% / 0.25);
+      border-color: hsl(210 80% 55%);
+    }
+
+    .cov-2 {
+      background: hsl(150 60% 45% / 0.25);
+      border-color: hsl(150 60% 45%);
+    }
+
+    .cov-3 {
+      background: hsl(35 90% 55% / 0.25);
+      border-color: hsl(35 90% 55%);
+    }
+
+    .cov-4 {
+      background: hsl(330 75% 60% / 0.25);
+      border-color: hsl(330 75% 60%);
+    }
+  </style>
+</Layout>

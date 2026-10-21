@@ -1,0 +1,16 @@
+credential.helper=libsecret
+credential.https://github.com.helper=
+credential.https://github.com.helper=!/usr/bin/gh auth git-credential
+credential.https://gist.github.com.helper=
+credential.https://gist.github.com.helper=!/usr/bin/gh auth git-credential
+user.name=aolivera0
+user.email=aolivera@unal.edu.co
+core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+remote.origin.url=https://github.com/aolivera0/Cripto.git
+remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+branch.main.remote=origin
+branch.main.merge=refs/heads/main
+pull.rebase=true
