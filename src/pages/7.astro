@@ -242,17 +242,13 @@ import Layout from "../layouts/Layout.astro";
     const textoDescifrado =
       document.querySelector<HTMLParagraphElement>("#texto-descifrado")!;
 
-    // Retícula actual: 1 = hueco, 0 = cartón. Nunca se rota en sitio.
     let matrizCeldas: number[][] = [];
 
-    // ---------- Rotaciones (devuelven una matriz nueva) ----------
     const girarMatrizDerecha = (m: number[][]) =>
       m.map((_, i) => m.map((fila) => fila[i]).reverse());
 
     const girarMatrizIzquierda = (m: number[][]) =>
       m[0].map((_, i) => m.map((fila) => fila[fila.length - 1 - i]));
-
-    // ---------- Lógica del algoritmo ----------
 
     // Lista ordenada de posiciones [fila, col] en las que se escribe,
     // recorriendo los 4 giros de la retícula. Trabaja sobre una copia.
@@ -277,7 +273,6 @@ import Layout from "../layouts/Layout.astro";
       return pos;
     }
 
-    // Devuelve un mensaje de error, o null si la retícula es válida.
     function validar(rejilla: number[][]): string | null {
       const n = rejilla.length;
       if (n % 2 !== 0) return "El tamaño de la retícula debe ser par.";
@@ -296,7 +291,6 @@ import Layout from "../layouts/Layout.astro";
       const bloque = n * n;
       const pos = posiciones(rejilla, horario);
 
-      // Rellena con X hasta completar un número entero de bloques
       texto = texto.padEnd(Math.ceil(texto.length / bloque) * bloque, "X");
 
       let salida = "";
@@ -315,7 +309,7 @@ import Layout from "../layouts/Layout.astro";
     function descifrar(cifrado: string, rejilla: number[][], horario: boolean) {
       const n = rejilla.length;
       const bloque = n * n;
-      const pos = posiciones(rejilla, horario); // misma dirección que al cifrar
+      const pos = posiciones(rejilla, horario); 
 
       let salida = "";
       for (let b = 0; b < cifrado.length; b += bloque) {
@@ -325,17 +319,14 @@ import Layout from "../layouts/Layout.astro";
       return salida;
     }
 
-    // ---------- Utilidades de UI ----------
     function limpiarEntrada(input: HTMLInputElement) {
       return input.value.toUpperCase().replace(/\s+/g, "");
     }
 
-    // Separa el texto en grupos de n letras para mostrarlo (una fila por grupo)
     function agrupar(texto: string, n: number) {
       return texto.match(new RegExp(`.{1,${n}}`, "g"))?.join(" ") ?? "";
     }
 
-    // Las 4 celdas equivalentes por rotación de (i, j)
     function orbita(i: number, j: number, n: number): [number, number][] {
       const res: [number, number][] = [];
       let a = i;
@@ -347,14 +338,12 @@ import Layout from "../layouts/Layout.astro";
       return res;
     }
 
-    // Una celda queda bloqueada si otra de su órbita ya es hueco
     function estaBloqueada(i: number, j: number) {
       if (matrizCeldas[i][j] === 1) return false;
       const n = matrizCeldas.length;
       return orbita(i, j, n).some(([a, b]) => matrizCeldas[a][b] === 1);
     }
 
-    // Para cada celda, en qué giro (1-4) queda expuesta (0 = nunca)
     function cobertura(): number[][] {
       const n = matrizCeldas.length;
       const mapa: number[][] = Array.from({ length: n }, () =>
@@ -450,7 +439,6 @@ import Layout from "../layouts/Layout.astro";
       renderMatriz();
     }
 
-    // Genera una retícula válida: un hueco al azar por cada órbita
     function reticulaAleatoria() {
       const n = parseInt(matrizSize.value);
       matrizCeldas = Array.from({ length: n }, () => Array(n).fill(0));
@@ -466,7 +454,6 @@ import Layout from "../layouts/Layout.astro";
 
     const esHorario = () => direccionSelect.value === "1";
 
-    // ---------- Eventos ----------
     matrizSize.addEventListener("change", dibujarMatriz);
     direccionSelect.addEventListener("change", renderCobertura);
     btnLimpiar.addEventListener("click", dibujarMatriz);
@@ -510,7 +497,6 @@ import Layout from "../layouts/Layout.astro";
       textoDescifrado.textContent = descifrar(texto, matrizCeldas, esHorario());
     });
 
-    // Dibuja la retícula inicial al cargar la página
     dibujarMatriz();
   </script>
 
