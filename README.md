@@ -1,7 +1,7 @@
 # 🔐 Cripto
 
 ![Status](https://img.shields.io/badge/status-en%20desarrollo-yellow)
-![Astro](https://img.shields.io/badge/Astro-5.x-orange?logo=astro)
+![Astro](https://img.shields.io/badge/Astro-7.x-orange?logo=astro)
 ![TypeScript](https://img.shields.io/badge/TypeScript-blue?logo=typescript)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
@@ -19,8 +19,15 @@ El proyecto reúne diferentes implementaciones relacionadas con conceptos fundam
 
 | # | Ejercicio | Tema | Estado |
 |---|-----------|------|--------|
-| 01 | Ejercicio 1 | OTP | ✅ Completado |
-| 02 | Ejercicio 2 | -   | ⏳ Pendiente  |
+| 01 | OTP | One-Time Pad | ✅ Completado |
+| 02 | Playfair | Cifrado por digramas | ✅ Completado |
+| 03 | Caesar | Cifrado por desplazamiento | ✅ Completado |
+| 04 | Vigenère | Cifrado polialfabético | ✅ Completado |
+| 05 | Hill | Cifrado matricial | ✅ Completado |
+| 06 | Homofónico | Cifrado homofónico | ✅ Completado |
+| 07 | Turning Grille | Cifrado por transposición con rejilla | ✅ Completado |
+| 08 | DES | Cifrado de imágenes con DES | ✅ Completado |
+| 09 | AES | Cifrado de imágenes con AES (128/192/256 bits) | ✅ Completado |
 
 > Esta tabla se irá actualizando a medida que se desarrollen nuevos ejercicios.
 
@@ -42,23 +49,93 @@ Este proyecto tiene como objetivos:
 
 ## 🧩 Ejercicios
 
-### 🔹 Ejercicio 1
+### 🔹 Ejercicio 1: OTP
 
 **Estado:** ✅ Completado
 
-El primer ejercicio consiste en implementar el algoritmo criptográfico One-Time Pad (OTP). El algoritmo recibe un mensaje en texto claro y una llave, y permite realizar tanto el proceso de cifrado como el proceso inverso de descifrado.
-
-#### Implementación
+One-Time Pad.
 
 👉 **[Ver ejercicio](https://cripto-2026-2.netlify.app/1/)**
 
 ---
 
-### 🔹 Ejercicio 2
+### 🔹 Ejercicio 2: Playfair
 
-**Estado:** ⏳ Pendiente
+**Estado:** ✅ Completado
 
-Próximamente.
+Cifrado por digramas.
+
+👉 **[Ver ejercicio](https://cripto-2026-2.netlify.app/2/)**
+
+---
+
+### 🔹 Ejercicio 3: Caesar
+
+**Estado:** ✅ Completado
+
+Cifrado por desplazamiento.
+
+👉 **[Ver ejercicio](https://cripto-2026-2.netlify.app/3/)**
+
+---
+
+### 🔹 Ejercicio 4: Vigenère
+
+**Estado:** ✅ Completado
+
+Cifrado polialfabético.
+
+👉 **[Ver ejercicio](https://cripto-2026-2.netlify.app/4/)**
+
+---
+
+### 🔹 Ejercicio 5: Hill
+
+**Estado:** ✅ Completado
+
+Cifrado matricial.
+
+👉 **[Ver ejercicio](https://cripto-2026-2.netlify.app/5/)**
+
+---
+
+### 🔹 Ejercicio 6: Homofónico
+
+**Estado:** ✅ Completado
+
+Cifrado homofónico.
+
+👉 **[Ver ejercicio](https://cripto-2026-2.netlify.app/6/)**
+
+---
+
+### 🔹 Ejercicio 7: Turning Grille
+
+**Estado:** ✅ Completado
+
+Cifrado por transposición con rejilla.
+
+👉 **[Ver ejercicio](https://cripto-2026-2.netlify.app/7/)**
+
+---
+
+### 🔹 Ejercicio 8: DES
+
+**Estado:** ✅ Completado
+
+Cifrado de imágenes con DES.
+
+👉 **[Ver ejercicio](https://cripto-2026-2.netlify.app/8/)**
+
+---
+
+### 🔹 Ejercicio 9: AES
+
+**Estado:** ✅ Completado
+
+Cifrado de imágenes con AES. Recibe una imagen en cualquier formato y una clave, permite elegir el nivel de seguridad (128, 192 o 256 bits), muestra el resultado en Base64 (también en consola) y permite descifrarlo para recuperar la imagen original.
+
+👉 **[Ver ejercicio](https://cripto-2026-2.netlify.app/9/)**
 
 ---
 
@@ -68,6 +145,8 @@ El proyecto está construido utilizando principalmente:
 
 - **[Astro](https://astro.build/)** — Framework utilizado para la construcción de la aplicación web.
 - **TypeScript** — Lenguaje utilizado para el desarrollo.
+- **[crypto-js](https://github.com/brix/crypto-js)** — Implementación de DES y AES usada en los talleres 8 y 9.
+- **Tailwind CSS** — Estilos de la interfaz.
 - **HTML / CSS** — Estructura y estilos de la interfaz.
 - **JavaScript** — Lógica de la aplicación.
 
