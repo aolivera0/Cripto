@@ -215,6 +215,7 @@ import Layout from "../layouts/Layout.astro";
   </main>
 
   <script>
+    import { limpiarTexto } from "../utils/alfabeto";
     const matrizSize =
       document.querySelector<HTMLSelectElement>("#matrix-size")!;
     const direccionSelect =
@@ -320,7 +321,7 @@ import Layout from "../layouts/Layout.astro";
     }
 
     function limpiarEntrada(input: HTMLInputElement) {
-      return input.value.toUpperCase().replace(/\s+/g, "");
+      return limpiarTexto(input.value);
     }
 
     function agrupar(texto: string, n: number) {

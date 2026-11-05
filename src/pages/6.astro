@@ -189,6 +189,7 @@ import Layout from "../layouts/Layout.astro";
   </main>
 
   <script>
+    import { limpiarTexto } from "../utils/alfabeto";
     const textoACifrar =
       document.querySelector<HTMLInputElement>("#texto-a-cifrar")!;
     const btnCifrar = document.querySelector<HTMLButtonElement>("#cifrar-btn")!;
@@ -255,7 +256,7 @@ import Layout from "../layouts/Layout.astro";
     }
 
     function limpiarEntrada(texto: HTMLInputElement) {
-      return texto.value.toUpperCase().split(" ").join("");
+      return limpiarTexto(texto.value);
     }
 
     function imprimirResultado(

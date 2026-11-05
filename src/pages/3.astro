@@ -173,6 +173,7 @@ import Layout from "../layouts/Layout.astro";
   </main>
 
   <script>
+    import { ALFABETO, limpiarTexto } from "../utils/alfabeto";
     const textoACifrar =
       document.querySelector<HTMLInputElement>("#texto-a-cifrar")!;
     const kCifrar = document.querySelector<HTMLInputElement>("#k-cifrar")!;
@@ -188,14 +189,13 @@ import Layout from "../layouts/Layout.astro";
     const textoDescifrado =
       document.querySelector<HTMLParagraphElement>("#texto-descifrado")!;
 
-    const ALFABETO = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
 
     btnCifrar.addEventListener("click", () => {
       const kNumero = Number.parseInt(kCifrar.value);
       let mensajeEncriptado: string = "";
 
-      for (const caracter of textoACifrar.value) {
-        let position = ALFABETO.indexOf(caracter.toUpperCase());
+      for (const caracter of limpiarTexto(textoACifrar.value)) {
+        let position = ALFABETO.indexOf(caracter);
         if (position >= 0) {
           mensajeEncriptado += ALFABETO[(position + kNumero) % ALFABETO.length];
         }
@@ -208,8 +208,8 @@ import Layout from "../layouts/Layout.astro";
       const kNumero = Number.parseInt(kDescifrar.value);
       let mensajeDescifrado: string = "";
 
-      for (const caracter of textoADescifrar.value) {
-        let position = ALFABETO.indexOf(caracter.toUpperCase());
+      for (const caracter of limpiarTexto(textoADescifrar.value)) {
+        let position = ALFABETO.indexOf(caracter);
         if (position >= 0) {
           mensajeDescifrado +=
             ALFABETO[

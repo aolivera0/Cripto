@@ -29,6 +29,8 @@ El proyecto reúne diferentes implementaciones relacionadas con conceptos fundam
 | 08 | DES | Cifrado de imágenes con DES | ✅ Completado |
 | 09 | AES | Cifrado de imágenes con AES (128/192/256 bits) | ✅ Completado |
 
+> Los talleres clásicos (1 a 7) usan el mismo alfabeto: el inglés de 26 letras (`A`–`Z`), definido en `src/utils/alfabeto.ts`. Antes de cifrar, el texto se pasa a mayúsculas, se le quitan las tildes (la `Ñ` pasa a `N`) y se descartan los espacios y cualquier otro carácter.
+
 > Esta tabla se irá actualizando a medida que se desarrollen nuevos ejercicios.
 
 ---

@@ -109,6 +109,7 @@ import Layout from "../layouts/Layout.astro";
   </main>
 
   <script>
+    import { ALFABETO, limpiarTexto } from "../utils/alfabeto";
     const textoACifrar =
       document.querySelector<HTMLInputElement>("#texto-a-cifrar")!;
     const textoCifrado =
@@ -124,7 +125,6 @@ import Layout from "../layouts/Layout.astro";
     const descifrarBtn =
       document.querySelector<HTMLButtonElement>("#descifrar-btn")!;
 
-    const ALFABETO = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZabcdefghijklmnñopqrstuvwxyz ";
     const BASE = ALFABETO.length;
 
     function showResult(el: HTMLElement, text: string) {
@@ -132,7 +132,7 @@ import Layout from "../layouts/Layout.astro";
     }
 
     cifrarBtn.addEventListener("click", () => {
-      const input = textoACifrar.value;
+      const input = limpiarTexto(textoACifrar.value);
       if (!input) return;
 
       let cifrado = "";
@@ -151,8 +151,8 @@ import Layout from "../layouts/Layout.astro";
     });
 
     descifrarBtn.addEventListener("click", () => {
-      const texto = textoADescifrar.value;
-      const llaveInput = llaveADescifrar.value;
+      const texto = limpiarTexto(textoADescifrar.value);
+      const llaveInput = limpiarTexto(llaveADescifrar.value);
       if (!texto || !llaveInput) return;
 
       let descifrado = "";

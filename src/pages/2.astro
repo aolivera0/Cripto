@@ -199,6 +199,7 @@ import Layout from "../layouts/Layout.astro";
   </main>
 
   <script>
+    import { ALFABETO, limpiarTexto } from "../utils/alfabeto";
     const llaveAUsar =
       document.querySelector<HTMLInputElement>("#llave-a-usar")!;
     const btnGenerarLlave =
@@ -218,7 +219,6 @@ import Layout from "../layouts/Layout.astro";
       "#mensaje-descifrado",
     )!;
 
-    const ALFABETO = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     let matrizLlave: String[][] = [];
     let textoCifrado = "";
     let textoDescifrado = "";
@@ -239,7 +239,7 @@ import Layout from "../layouts/Layout.astro";
     });
 
     btnCifrar?.addEventListener("click", () => {
-      let input = textoACifrar.value.toUpperCase().replaceAll(/\s+/g, "");
+      let input = limpiarTexto(textoACifrar.value);
       const ultimaLetra = input.slice(-1);
       if (input.length % 2 !== 0) input += ultimaLetra;
       let inputModificado = input.replaceAll("J", "I");
@@ -253,7 +253,7 @@ import Layout from "../layouts/Layout.astro";
     });
 
     btnDescifrar?.addEventListener("click", () => {
-      let input = textoADescifrar.value.toUpperCase();
+      let input = limpiarTexto(textoADescifrar.value);
       textoDescifrado = "";
 
       for (let i = 0; i < input.length; i += 2) {
@@ -270,7 +270,7 @@ import Layout from "../layouts/Layout.astro";
     }
 
     function generarMatriz(input: string) {
-      let textoLimpio = input.toUpperCase().replaceAll(/\s+/g, "");
+      let textoLimpio = limpiarTexto(input);
       let cadenaCompleta = textoLimpio + ALFABETO;
       let IJInsertado = false;
       let elementosUnicos: String[] = [];
